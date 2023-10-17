@@ -1,0 +1,180 @@
+\documentclass[12pt]{article}
+\usepackage[paper=letterpaper,margin=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{newtxtext, newtxmath}
+\usepackage{enumitem}
+\usepackage{titling}
+\usepackage[colorlinks=true]{hyperref}
+
+\setlength{\droptitle}{-6em}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{MS-E1651 - Numerical Matrix Computations
+\\Exercise 3}
+\author{Amirreza Akbari}
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{enumerate}[leftmargin=\labelsep]
+	\item (P40)\\[0.5em]
+\textbf{Solution:} 
+	
+(a) Given:
+$
+(A + uv^T)\hat{x} = b \quad \text{(1)}
+$
+$
+Ax = b \quad \text{(2)}
+$
+
+We want to show that:
+
+$
+(A + uv^T)w = uv^Tx \quad \text{(3)}
+$
+
+Now, let's evaluate $(A + uv^T)w$ on the left side of equation (3) using equation (4):
+
+
+\begin{align*}
+(A + uv^T)w &= (A + uv^T)x - (A + uv^T)\hat{x}\\
+&= Ax + uv^Tx - (A + uv^T)\hat{x} \\
+&= b + uv^Tx - b  \\
+&= uv^Tx
+\end{align*}
+
+(b) We know that:
+\begin{align*}
+(A + uv^T)w &= uv^Tx\\
+Aw + uv^Tw & = uv^Tx\\
+A^{-1}Aw + A^{-1}uv^Tw &= A^{-1}uv^Tx\\
+\rightarrow w &= A^{-1}uv^Tx - A^{-1}uv^Tw\\
+w &= A^{-1}u(v^Tx) - A^{-1}u(v^Tw)
+\end{align*}
+Both $(v^Tw)$ and $(v^Tx)$ are in $\mathbb{R}$ and they are scalar. Thus we can have above equation as follows:
+$$w = (v^Tw - v^Tx)A^{-1}u$$
+and if we put $\alpha = (v^Tw - v^Tx)$ we would have the result that $w = \alpha A^{-1}u$ for some $\alpha \in \mathbb{R}$.
+
+(c) Now, let's find the value of $\alpha$ using these results.
+
+Starting from the equation in \textbf{(a)}: $$(A + uv^T)w = uv^Tx$$.
+
+Substituting $w = \alpha A^{-1}u$ from \textbf{(b)}:
+
+$$(A + uv^T)(\alpha A^{-1}u) = uv^Tx$$
+
+Now, let's simplify this equation:
+
+$$\alpha(A + uv^T)A^{-1}u = uv^TA^{-1}b$$
+
+Both terms $\alpha(A + uv^T)A^{-1}$ and $v^TA^{-1}b$are scalar and both are coeficient of $u$ in both side of equation, so they must be equal. Thus we have
+
+$$\alpha(A + uv^T)A^{-1} = v^TA^{-1}b $$
+
+$$\alpha = \frac{v^TA^{-1}b}{(A + uv^T)A^{-1}} $$
+
+$$\alpha = \frac{v^TA^{-1}b}{(1 + uv^TA^{-1})} $$
+
+Now, let's find $\hat{x}$ using the result from \textbf{(b)}:
+
+$$w = \alpha A^{-1}u$$
+
+$$w = \frac{v^TA^{-1}b}{1 + v^TA^{-1}u}A^{-1}u$$
+
+Now, let's express $\hat{x}$ in terms of $w$:
+
+$$\hat{x} = A^{-1}b - w$$
+
+$$\hat{x} = A^{-1}b - \frac{v^TA^{-1}b}{1 + v^TA^{-1}u}A^{-1}u$$
+
+and since $v^TA^{-1}b$ is a scalar we can write as follows: 
+
+$$\hat{x} = A^{-1}b - \frac{A^{-1}uv^TA^{-1}b}{1 + v^TA^{-1}u}$$
+\item (P41)
+\textbf{Solution: }
+
+(a) Based on the definition we have
+
+$$(U\Sigma V^T - U\delta \Sigma V^T)e = b$$
+
+Multiplying both side of equation by $U^{T}$ from gives us
+
+$$(\Sigma V^T - \delta \Sigma V^T)e = U^{T}b$$
+$$(\Sigma - \delta \Sigma)V^Te = U^{T}b$$
+
+Then we would have $(\Sigma - \delta \Sigma) = diag(\sigma_1 - \delta \sigma_1, \cdots, \sigma_n - \delta \sigma_n)$
+and if we define matrix $\hat{\Sigma} = diag(\frac{\sigma_1^{-1}}{1 - \sigma_1^{-1}\delta \sigma_1}, \cdots, \frac{\sigma_n^{-1}}{1 - \sigma_n^{-1}\delta \sigma_n})$, we will have $$\hat{\Sigma}(\Sigma - \delta \Sigma) = (\Sigma - \delta \Sigma)\hat{\Sigma} = I$$
+
+So if multiply both side of equation by $\hat{\Sigma}$, we will have
+
+$$V^Te = \hat{\Sigma}U^{T}b$$
+
+Moreover it is enough to multiply by $V$ from right in both side of equation, so we will have 
+
+$$e = V\hat{\Sigma}U^{T}b$$
+
+(b) First of all, we know that inverse of $A$ is 
+$$A^{-1} = V\Sigma^{-1}U^{T}$$
+In this problem we are going to use unitarily invariant property, which is
+
+$$||UA||_2 = ||A||_2$$
+
+if $U$ is unitary matrix. Since norm-2 of $b$ is $1$, we would have
+
+\begin{align}
+	e &\leq \frac{||A^{-1}||_2}{1 - ||A^{-1}||_2\,||\delta A||_2}\\e &\leq \frac{||V\Sigma^{-1}U^{T}||_2}{1 - ||V\Sigma^{-1}U^{T}||_2\,||U\delta\hat{\Sigma} V^{T}||_2}
+	\\ e &\leq \frac{||\Sigma^{-1}U^{T}||_2}{1 - ||\Sigma^{-1}U^{T}||_2\,||\delta\hat{\Sigma} V^{T}||_2}\\e &\leq \frac{||\Sigma^{-1}||_2}{1 - ||\Sigma^{-1}||_2\,||\delta\hat{\Sigma}||_2}
+\end{align}
+So we would have
+$$e \leq \frac{\max_{i} |\sigma_i|}{1 - (\max_{i} |\frac{1}{\sigma_i}|)(\max_i |\frac{\sigma_i^{-1}}{1 - \sigma_i^{-1}\delta \sigma_i}|)}$$
+\item (P43)
+\textbf{Solution: }
+
+(a) 
+
+$$(345)_{10} = (101011001)_2 \approx (1.010)_{2} \times 2^{8}$$
+
+$$(\frac{1}{3})_{10} = (0.0101010101....)_2 \approx (1.011)_{2} \times 2^{-2}$$
+
+(b)
+
+$$(1.010)_{2} \times 2^{8} = 320 \rightarrow |\hat{x_1} - x_1| = 25$$
+
+$$(1.011)_{2} \times 2^{-2} = \frac{11}{32} \rightarrow |\hat{x_2} - x_2| = \frac{1}{96}$$
+
+(c)
+
+$$ u = \frac{1}{2^{3}} = \frac{1}{8}$$
+
+(d)
+
+\begin{align}
+\hat{x_1} + \hat{x_2} = (10100000000.00)_{2} \times 2^{-2} + (1.011)_{2} \times 2^{-2} &= (10100000001.011)_{2} \times 2^{-2}\\
+& = (1.010)_{2} \times 2^{8}
+\end{align}
+
+\item (P47) 
+\textbf{Solution: } 
+
+(a) In this part, we use the previous problem P46. Then, for all $i = 2,\cdots,\,n$, we write $1+u$ instead of $1+\delta_i$, and for all $k = 1,\cdots,n$, we write $1 + u$ instead of $1 + \hat{\delta}$. In the other word, we are trying to make $|fl(\Sigma x_i y_i) - \Sigma x_i y_i|$ greater, and also for each $i$, we consider the inner multiplication like $\Sigma_{k=1}^{n} (1+\delta_i)$.
+
+\begin{align}
+	|fl(\Sigma x_i y_i) - \Sigma x_i y_i| \leq |\Sigma x_i y_i (1+u)^n - x_iy_i| 
+\end{align}
+Based on Lemma (1.5), we have:
+\begin{align}
+	|fl(\Sigma x_i y_i) - \Sigma x_i y_i| \leq |\Sigma x_i y_i (1+u)^n - x_iy_i| \leq |\Sigma(1 + \frac{nu}{1-nu}) x_i y_i - \Sigma x_i y_i| = \frac{nu}{1-nu} |x^T y|\\ 
+	\rightarrow \frac{nu}{1-nu} |x^T y| \leq \frac{nu}{1-nu} ||x||\,||y|| \leq \frac{nu}{1-nu}
+\end{align}
+In the last part, we used Cauchy–Schwarz inequality to conclude the inequality.
+
+(b) Note that since $U$ and $V$ are unitary matrix, each row and column of them has lenght exactly $1$. Thus, if we name row of $U$, $R_i^T$ and column of $V$, $C_j$, for all $i$ and $j$, $$||R_i||_2=||C_j||_2 = 1$$
+So conditions of part (a) hold here, and we can use part (a). Also note that $(UV)_{ij} = R_i^T C_j$. So $|E_{ij}| = |fl(R_i^TC_j)-(UV)_{ij}| = |fl(R_i^TC_j)-R_i^T C_j|$. Moreover, based on part (a), we know that $|fl(R_i^TC_j)-R_i^T C_j| \leq \frac{nu}{1 - nu}$.
+So we can write 
+$$fl(UV) = UV - E$$
+\end{enumerate}
+\end{document}

@@ -1,0 +1,295 @@
+\documentclass{article}
+\usepackage[paper=letterpaper,margin=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{newtxtext, newtxmath}
+\usepackage{enumitem}
+\usepackage{titling}
+\usepackage[colorlinks=true]{hyperref}
+
+\setlength{\droptitle}{-6em}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{MS-E1651 - Numerical Matrix Computations
+\\Exercise 6}
+\author{Amirreza Akbari}
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{enumerate}[leftmargin=\labelsep]
+	\item (P70)
+	
+	\textbf{Solution:}
+		\textbf{Base Case (n = 0):}
+		We know that
+		\[r_0 = b - Ax_0 = b\]
+		and
+		\[p_0 = r_0\]
+		so
+		\[p_0 \in \text{Span}\{b\}\]
+		Moreover, we have
+		\[x_1 = x_0 + \alpha_0 p_0 = \alpha_0 r_0\]
+		Since \(\alpha_0\) is just a scalar, we can conclude that \(x_1 \in \text{Span}\{b\}\). Therefore, both \(x_1\) and \(p_0\) are in \(\mathcal{K}_1(A, b)\).
+		
+		\textbf{Induction Step:}
+		Assume the statement holds for all \(n < i\), then we want to prove it also holds for \(n = i\).
+		
+		\textbf{Claim 1:}
+		\[r_i \in \text{Span}\{b, Ab, \ldots, A^ib\}\]
+		
+		\textit{Proof of Claim 1:}
+		We have
+		\[r_i = b - Ax_i\]
+		and by the induction hypothesis, we know that \(x_i \in \text{Span}\{b, Ab, \ldots, A^{i-1}b\}\). Therefore,
+		\[Ax_i \in \text{Span}\{Ab, A^2b, \ldots, A^ib\}\]
+		and
+		\[r_i = b - Ax_i \in \text{Span}\{b, Ab, \ldots, A^ib\}\]
+		
+		\textbf{Claim 2:}
+		\[p_i \in \text{Span}\{b, Ab, \ldots, A^ib\}\]
+		
+		\textit{Proof of Claim 2:}
+		Using the expression for \(p_i\),
+		\[p_i = r_i - \sum_{k=0}^{i-1}\beta_{i,k} p_k\]
+		We already know that \(r_i\) is in \(\text{Span}\{b, Ab, \ldots, A^ib\}\), and each \(p_k\) is in \(\text{Span}\{b, Ab, \ldots, A^kb\}\) by the induction hypothesis. Since \(k\) is at most \(i-1\), we can conclude that \(p_i\) is in \(\text{Span}\{b, Ab, \ldots, A^ib\}\).
+		
+		\textbf{Claim 3:}
+		\[x_{i+1} \in \text{Span}\{b, Ab, \ldots, A^{i+1}b\}\]
+		
+		\textit{Proof of Claim 3:}
+		We know that \(x_i \in \text{Span}\{b, Ab, \ldots, A^{i-1}b\}\) and \(p_i \in \text{Span}\{b, Ab, \ldots, A^ib\}\). Therefore,
+		\[x_{i+1} = x_i + \alpha_i p_i \in \text{Span}\{b, Ab, \ldots, A^{i+1}b\}\]
+		
+		This completes the induction step, and we have shown that if the statement holds for all \(n < i\), then it also holds for \(n = i\). Hence, by mathematical induction, the statement is true for all \(i\).
+		\item (P71)
+		
+		\textbf{Solution: }
+
+		Let's use induction for solving this problem.
+
+		Assume that $x_i$'s are solutions to first problem, and $x'_i$'s are solutions to the second problem.
+
+		Base induction: We have $x_1 = c_0 + x_0$, and $x'_1 = x_0 + \frac{r}{} p'_0$.
+
+		\begin{align}
+			r'_0 = b - Ax'_0 = b - Ax_0\\
+			p'_0 = r'_0\\
+			x'_1 = x'_0 + \frac{p'^T_0r'_0}{p'^T_0Ap'_0} p'_0
+		\end{align}
+
+		and for second one
+
+		\begin{align}
+			r_0 = b - Ax_0 - Ac_0 = b - Ax_0\\
+			p_0 = r_0\\
+			c_1 = c_0 +  \frac{p^T_0r_0}{p^T_0Ap_0} p_0 = \frac{p^T_0r_0}{p^T_0Ap_0} p_0\\
+			x_1 = x_0 + c_1 = x_0 + \frac{p^T_0r_0}{p^T_0Ap_0} p_0
+		\end{align}
+
+		so we would have $x_1' = x_1$, and $r_0' = r_0$.
+
+		Induction step: Let's assume for all $n < i+1$, we have $x_n' = x_n$, $r'_n = r_n$, $p'_n = p_n$.
+
+		\begin{align}
+			r'_i = b - Ax'_i = b - Ax_i\\
+			p'_i = r'_i - \Sigma_{k=0}^{i} \frac{r_i'^T A p_k'}{p_k'^T A p_k'} p'_k\\
+			x'_{i+1} = x'_i + \frac{p'^T_ir'_i}{p'^T_iAp'_i} p'_i
+		\end{align}
+
+		and for the second one
+
+		\begin{align}
+			r_{i} = b - Ax_0 - Ac_i = b - Ax_0 - A(x_i - x_0) = b - Ax_i\\
+			p_i = r_i - \Sigma_{k=0}^{i} \frac{r_i^T A p_k}{p_k^T A p_k} p_k\\
+			c_{i+1} = c_i +  \frac{p^T_ir_i}{p^T_iAp_i} p_i = c_i + \frac{p^T_ir_i}{p^T_iAp_i} p_i\\
+			x_{i+1} = x_0 + c_{i+1} = x_0 + c_i +  \frac{p^T_ir_i}{p^T_iAp_i} p_i = x_0 + (x_i - x_0) +  \frac{p^T_ir_i}{p^T_iAp_i} p_i = x_i + \frac{p^T_ir_i}{p^T_iAp_i} p_i
+		\end{align}
+
+		based on the induction hypothesis, $x'_{i+1} = x_{i+1}$.
+		\item (P72) 
+		
+		\textbf{Solution:}
+
+		(a) Since $\hat{x} \in S$, so there is a $y \in R^{k}$ s.t. $Qa = \hat{x}$. Moreover consider cholskey decomposition of $A = LL^T$. So we have 
+		\begin{align}
+			||\hat{x} - x||_A = \sqrt{(\hat{x}-x)^TA(\hat{x}-x)} &=\sqrt{(Qa-x)^TLL^T(Qa-x)} \\&= \sqrt{(Qa-x)^T(L^T)^TL^T(Qa-x)}\\&= \sqrt{(L^T(Qa-x))^T(L^T(Qa-x))}\\&= \sqrt{(L^TQa-L^Tx)^T(L^TQa-L^Tx)}
+		\end{align}
+		If we subsitute $L^TQ = G$ and $L^Tx = b$, we would have
+		\begin{align}
+			\sqrt{(L^TQa-L^Tx)^T(L^TQa-L^Tx)} = \sqrt{(Ga-b)^T(Ga-b)} = ||Ga-b||_2
+		\end{align}
+
+		(b) So based on part a, $G = L^TQ$, $Qa = \hat{x}$, and $L^Tx = b$.
+
+		So we have 
+		\begin{align}
+			G^TGa = G^Tb\\
+			a = (G^TG)^{-1}G^Tb\\
+			Qa = Q(G^TG)^{-1}G^Tb\\
+			\hat{x} = Q(Q^TAQ)^{-1}Q^TLL^Tx\\
+			\hat{x} = Q(Q^TAQ)^{-1}Q^TAx
+		\end{align}
+
+		(c) 
+		
+		In the general case, we can have an arbitrary positive definite matrix $D$, the projection $P_{A}$ is given by
+
+		$$P_A = A(A^TDA)^{-1}A^TD$$
+
+		This is exactly the same formula that we have in part b, if we subsitute $A = Q$, and $D = A$.
+
+		\item (P74) 
+		
+		\textbf{Solution:} 
+
+		(a) 
+
+		\begin{align}
+			Ax = \lambda x\\
+			QDQ^Tx = \lambda x\\
+			Q^TQDQ^Tx = Q^T\lambda x\\
+			DQ^Tx = \lambda Q^T x\\
+			y = Q^Tx \rightarrow Dy = \lambda y 
+		\end{align}
+		Now if we calculate $det(D - \lambda I) = (10 - \lambda)(0.5 - \lambda)(0.1 - \lambda)$, we see that $\lambda = 10,\,0.5,\,0.1$.
+		So for $\lambda = 10$:
+		\begin{align}
+			Dy = 10y\\
+			[10y_1,0.5y_2,0.1y_3] = 10[y_1,y_2,y_3]\\
+			y_1 = 1,\,y_2 = 0,\,y_3 = 0\\
+			\rightarrow \lambda = 10, x = Qy
+		\end{align}
+		So for $\lambda = 0.5$:
+		\begin{align}
+			Dy = 10y\\
+			[10y_1,0.5y_2,0.1y_3] = 0.5[y_1,y_2,y_3]\\
+			y_1 = 1,\,y_2 = 1,\,y_3 = 0\\
+			\rightarrow \lambda = 0.5, x = Qy
+		\end{align}
+		So for $\lambda = 0.1$:
+		\begin{align}
+			Dy = 10y\\
+			[10y_1,0.5y_2,0.1y_3] = 0.1[y_1,y_2,y_3]\\
+			y_1 = 0,\,y_2 = 0,\,y_3 = 1\\
+			\rightarrow \lambda = 0.1, x = Qy
+		\end{align}
+
+		(b) 
+		\begin{align}
+			z_i = Az_{i-1}\\
+			\alpha_{i,\,1} q_1 +\alpha_{i,\,2} q_2 + \alpha_{i,\,3} q_3 = A\alpha_{i-1,\,1} q_1 + A\alpha_{i-1,\,2} q_2 + A\alpha_{i-1,\,3} q_3\\
+		\end{align}
+
+		Let's subsitute $q_i = Qe_i$, so we would have 
+
+		\begin{align}
+			\alpha_{i,\,1} Qe_1 +\alpha_{i,\,2} Qe_2 + \alpha_{i,\,3} Qe_3 = A\alpha_{i-1,\,1} Qe_1 + A\alpha_{i-1,\,2} Qe_2 + A\alpha_{i-1,\,3} Qe_3\\
+			(\alpha_{i,1}Q - \alpha_{i-1,1}AQ)e_1 + 
+			(\alpha_{i,2}Q - \alpha_{i-1,2}AQ)e_2 +
+			(\alpha_{i,3}Q - \alpha_{i-1,3}AQ)e_3 = 0 
+		\end{align}
+
+		Let's multiply a $Q^T$ from right side, so we would have
+
+		$$(\alpha_{i,1}I - \alpha_{i-1,1}A)e_1 + 
+		(\alpha_{i,2}I - \alpha_{i-1,2}A)e_2 +
+		(\alpha_{i,3}I - \alpha_{i-1,3}A)e_3 = 0$$
+
+		Then multiplying $Q^T$ from left and $Q$ from right gives us:
+
+		$$(\alpha_{i,1}I - \alpha_{i-1,1}D)e_1 + 
+		(\alpha_{i,2}I - \alpha_{i-1,2}D)e_2 +
+		(\alpha_{i,3}I - \alpha_{i-1,3}D)e_3 = 0$$
+
+
+		Since $e_i$'s are basis of the space, and the right side is zero. The left side is a vector in $R^3$. So if we analysis each coordinates of this vectore we should obtain $[(\alpha_{i,1}I - \alpha_{i-1,1}D)]_1 = 0$, $[(\alpha_{i,2}I - \alpha_{i-1,2}D)]_2 = 0$, and $[(\alpha_{i,3}I - \alpha_{i-1,3}D)]_3 = 0$.
+
+		So we would have 
+		$\alpha_{i,1} = 10\alpha_{i-1,1}$, 
+		$\alpha_{i,2} = 0.5\alpha_{i-1,2}$, and 
+		$\alpha_{i,3} = 0.1\alpha_{i-1,3}$.
+
+		(c) We can see after some iterations, as it is shown in the plot, the two lines indicating the two small eigenvalues start to converge and grow, near iteration 10. The method can struggle when dealing with matrices containing poorly-conditioned eigenvalues. In such cases, "well-conditioned" means that the eigenvalues have significant differences in magnitudes. If the eigenvalues are closely matched in magnitude, the method may have difficulty converging or may converge very slowly. This can lead to instability in calculations and hinder the ability to separate meaningful information from noisy data.
+
+		One potential reason for this is that when the eigenvalues are not well-separated, the power iteration method may have trouble identifying the dominant eigenvalues. As a result, the $\alpha_{i,j}$ values may fluctuate unpredictably or grow slowly. The method relies on dominant eigenvalues for rapid convergence, and without clear dominance, numerical instability and slow convergence can become significant issues.
+
+		\item (P75)
+		
+		\textbf{Solution: }
+
+		(a) 
+
+		1. Form the matrix $P$, where the columns are the orthonormal eigenvectors of $A$:
+
+   $P = [v_1, v_2, \ldots, v_n]$
+
+   Since the eigenvectors are orthonormal, $P$ is an orthogonal matrix, meaning $P^T$ (the transpose of $P$) is the same as its inverse ($P^{-1}$).
+
+2. Create a diagonal matrix $\Lambda$, where the diagonal entries are the eigenvalues of $A$:
+
+   $\Lambda = \begin{bmatrix}
+   \lambda_1 & 0 & 0 & \ldots & 0 \\
+   0 & \lambda_2 & 0 & \ldots & 0 \\
+   0 & 0 & \lambda_3 & \ldots & 0 \\
+   \vdots & \vdots & \vdots & \ddots & \vdots \\
+   0 & 0 & 0 & \ldots & \lambda_n \\
+   \end{bmatrix}$
+
+3. Now, you can express $A$ in terms of its orthonormal eigenbasis:
+
+   $A = P\Lambda P^T$
+
+		\begin{align*}
+			||b||_A^2 = b^TAb = b^T P\Lambda P^T b &= b^T [v_1, v_2, \ldots, v_n] \Lambda [v_1, v_2, \ldots, v_n]^T b\\
+			= [b^Tv_1, b^Tv_2, \ldots, b^Tv_n]\Lambda [b^Tv_1, b^Tv_2, \ldots, b^Tv_n]^T &= \begin{bmatrix}
+				\lambda_1b^Tv_1 & 0 & 0 & \ldots & 0 \\
+				0 & \lambda_2b^Tv_2 & 0 & \ldots & 0 \\
+				0 & 0 & \lambda_3b^Tv_3 & \ldots & 0 \\
+				\vdots & \vdots & \vdots & \ddots & \vdots \\
+				0 & 0 & 0 & \ldots & \lambda_nb^Tv_n \\
+				\end{bmatrix} [b^Tv_1, b^Tv_2, \ldots, b^Tv_n]^T\\
+				&=\Sigma \lambda_i (b^Tv_i)^2
+		\end{align*}
+
+		(b) Assume that $q(A)= c_0 + c_1 A + c_2 A^2 + \cdots + c_n A^n$.
+
+		\begin{align}
+			q(A)&= c_0 + c_1 A + c_2 A^2 + \cdots + c_n A^n\\
+			&=c_0 + c_1 P\Lambda P^T + c_2 P\Lambda P^T P\Lambda P^T + \cdots + c_n P\Lambda^n P^T
+		\end{align}
+
+		and it is clear that 
+
+		\begin{align}
+			\Lambda^i = \begin{bmatrix}
+				\lambda_1^i & 0 & 0 & \ldots & 0 \\
+				0 & \lambda_2^i & 0 & \ldots & 0 \\
+				0 & 0 & \lambda_3^i & \ldots & 0 \\
+				\vdots & \vdots & \vdots & \ddots & \vdots \\
+				0 & 0 & 0 & \ldots & \lambda_n^i \\
+				\end{bmatrix}
+		\end{align}
+
+		Following same formulaiton as last part we have:
+
+		\begin{align*}
+			||q(A)b||_A^2 &= (q(A)b)^TA(q(A)b) \\&= (q(A)b)^T P\Lambda P^T (q(A)b) = (q(A)b)^T [v_1, v_2, \ldots, v_n] \Lambda [v_1, v_2, \ldots, v_n]^T (q(A)b)\\&=
+			((c_0 + c_1 P\Lambda P^T + \cdots + c_n P\Lambda^n P^T)b)^T [v_1, v_2, \ldots, v_n] \Lambda [v_1, v_2, \ldots, v_n]^T ((c_0 + c_1 P\Lambda P^T + \cdots + c_n P\Lambda^n P^T)b)
+		\end{align*}
+
+		Now let's consider term $i$ in the polynomial so we would have 
+		\begin{align}
+			(c_iP\Lambda^i P^T b)^T P\Lambda P^T (c_iP\Lambda^i P^T b) = c_i b^T P (\Lambda^i)^T P^T P\Lambda P^T c_iP\Lambda^i P^T b\\&= c_i^2 b^T P (\Lambda^i)^T \Lambda \Lambda^i P^T b\\
+		\end{align}
+		As you can see exactly we remove $A$ from polynomials and we just keep eigenvalues. As you can see it is obvious that there is $q(\lambda_i)^2$ is above equations more than the equation that we had in part a.
+		\item (P76)
+		
+		\textbf{Solution: }
+		
+		(b) As $i$ grows the error converge to $0$. However, as $L$ become larger convexity of plot become less and less.
+
+\end{enumerate}
+\end{document}

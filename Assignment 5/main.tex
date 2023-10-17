@@ -1,0 +1,197 @@
+\documentclass{article}
+\usepackage[paper=letterpaper,margin=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{newtxtext, newtxmath}
+\usepackage{enumitem}
+\usepackage{titling}
+\usepackage[colorlinks=true]{hyperref}
+
+\setlength{\droptitle}{-6em}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{MS-E1651 - Numerical Matrix Computations
+\\Exercise 5}
+\author{Amirreza Akbari}
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{enumerate}[leftmargin=\labelsep]
+	\item (P58)
+	
+	\textbf{Solution:}
+
+	(a) 
+
+	Notice that since $||x||_\infty > 0$ you can push the denominator into the max, then into the absolute value, and then apply the distributive property to the sum, i.e.
+	\begin{align}
+		\frac{\max_i||\Sigma_j a_{ij}x_j|}{||x||_\infty }= \max_i|\Sigma_j a_{ij}\frac{x_j}{||x||_\infty}|
+	\end{align}
+
+	You can then upper bound this value due to the fact that $x_j\leq ||x||_\infty \rightarrow \frac{x_j}{||x||_\infty} \leq 1$, hence:
+
+	\begin{align}
+		\max_i|\Sigma_j a_{ij}\frac{x_j}{||x||_\infty}| \leq \max_i |\Sigma_j a_{ij}|
+	\end{align}
+
+	It is enough to see such $x$ exists, because if we define $x = [1,1,1,1,\cdots,1,1]$, we would have $\frac{x_j}{||x||_\infty} = 1$.
+
+	(b) 
+
+	\begin{align}
+		||x||_2 = \sqrt{x_1^2 + \cdots + x_n^2} \leq \sqrt{n \times \max_i|x_i|^2} = \sqrt{n} \max_i |x_i| =  \sqrt{n} ||x_i||_\infty
+	\end{align}
+
+	\begin{align}
+		||x||_\infty = \max_i |x_i| = \sqrt{\max_i |x_i|^2} \leq \sqrt{x_1^2 + \cdots + x_n^2} = ||x||_2
+	\end{align}
+
+	\item (P59)
+	
+	\textbf{Solution:}
+
+	(a)
+
+	\begin{itemize}
+		\item Start with the equation $x = c + Cx$.
+		
+		\item Move $Cx$ to the other side by subtracting $Cx$ from both sides:
+		
+		\[x - Cx = c.\]
+		
+		\item Factor out $x$ from the left side:
+		
+		\[x(1 - C) = c.\]
+		
+		\item Since null space of $(1 - C)$ is only zero, it's invertible (i.e., full rank), so we would have
+		
+		\[x = c.(1 - C)^{-1}\]
+		
+		\item So, we have found a solution for $x$, and it is given by $x = c(1 - C)^{-1}$. 
+	\end{itemize}
+
+	(b) Let's use induction:
+
+	\textbf{Basis}: The statement clearly holds for $n = 0$
+
+	\textbf{Induction step}: Let's assume the statement holds for $n = k$, and we would prove it also holds for $n = k+1$.
+
+	\begin{align}
+		x_{k+1} &= c + Cx_{k} \\
+		&= c + C (x - e_k) \\
+		&= c + C (x - C^ke_0)\\
+		&= c+ Cx - C^{k+1}e_0
+	\end{align}
+
+	Now let's calculate $e_{k+1}$ as follows
+
+	\begin{align}
+		e_{k+1} = x - x_{k+1} &= x - (c+ Cx - C^{k+1}e_0)\\
+		&=C^{k+1}e_0
+	\end{align}
+	
+	Note that in the last step, we know from part (a), that $x = c + Cx$.
+
+	Moreover we know $||AB||\leq ||A||\cdot||B||$, so we have
+
+	\begin{align}
+		||e_{i}|| = ||C^ie_0|| \leq ||C^i||\cdot||e_0|| \leq ||C^{i-1}||\cdot||C||\cdot||e_0|| \leq \cdots \leq ||C||^i\cdot||e_0||
+	\end{align}
+
+	(c) Let's find eigendecomposition of mentioned matrix. 
+
+	The eigenvalues and eigenvectors of the matrix is:
+	\begin{align}
+		\lambda_1 = \frac{-\sqrt{2}}{x}, v_1 = (1, \sqrt{2}, 1)\\
+		\lambda_2 = \frac{\sqrt{2}}{x}, v_2 = (1, -\sqrt{2}, 1)\\
+		\lambda_3 = 0, v_3 = (-1, 0, 1)
+	\end{align}
+
+	So $\Lambda = \begin{bmatrix}
+		\frac{-\sqrt{2}}{x} & 0 & 0\\
+		0 & \frac{\sqrt{2}}{x} & 0\\
+		0 & 0 & 0
+	\end{bmatrix}$ and $Q = \begin{bmatrix}
+		1 & 1 & -1\\
+		\sqrt{2} & -\sqrt{2} & 0\\
+		1 & 1 & 1
+	\end{bmatrix}$, so we would have 
+
+	$$CQ = Q \Lambda $$
+	
+	This is also $Q^{-1} = \frac{1}{4} \begin{bmatrix}
+	1 & -\sqrt{2} & 1\\
+	1 & \sqrt{2} & 1\\
+	-2 & 0 & 2
+	\end{bmatrix}$, so $C^i = Q\Lambda^iQ^{-1} $, so if $C$ wants to converge to $0$, since $Q$, and $Q^{-1}$ are definite and fixed, just $\Lambda$ needs to converge to zero. So $\lim |\frac{\sqrt{2}}{x}|^i = 0$, so $|x|>\sqrt{2}$.
+	\item (P66)
+	
+	\textbf{Solution:}
+
+	(a) Note that based on Lemma 2.2, there is an $x$, which $Ax = b$ 
+
+	\begin{align}
+		p_{i+1} = A(x-x_{i+1})\\
+		\text{A is s.d.p} \rightarrow p_{i+1}^T = e_{i+1}^TA\\
+		e_{i+1}^TAp_i = p_{i+1}^Tp_i &= (p_i-\alpha_i A p_i)^T p_i\\
+		&=p_i^Tp_i - \alpha_ip_i^TAp_i = p_i^Tp_i - p_i^Tr_i = 0
+	\end{align}
+
+	Furthurmore
+
+	\begin{align}
+		x_{i+1} = x_i + \alpha_i p_i \\
+		\text{subtracting both side from x} \rightarrow e_{i+1} = e_i - \alpha_i p_i\\
+		Ae_{i+1} = Ae_i - \alpha_iA p_i\\
+		||e_{i+1}||_A = e_{i+1}^TAe_{i+1} = (e_i - \alpha_i p_i)^T A e_i - \alpha_i e_{i+1}^T A p_i = (e_i - \alpha_i p_i)^T A e_i &= e_i^TAe_i - \alpha_i p_i^TA e_i \\
+		&= e_i^TAe_i - \alpha_i p_i^T r_i = ||e_{i}||_A - \alpha_i^2 p_i^TAp_i
+	\end{align}
+
+	(b)
+	
+	\begin{align}
+		\text{Condition Number } \kappa(A) =||A||\cdot||A^{-1}||
+	\end{align}
+
+	Based on P65b and P65c, 
+
+	\begin{align*}
+		\frac{(p_i^Tr_i)^2}{(p_i^TAp_i)^2} p_i^TAp_i = \frac{(p_i^Tr_i)^2}{(p_i^TAp_i)} = \frac{(e_i^TA^TAe_i)^2}{(p_i^TAp_i)} = \frac{1}{(p_i^TAp_i)}||Ae_i||^4 \geq  \frac{1}{(p_i^TAp_i)} \frac{1}{||A^{-1}||^2} ||e_i||^4_A = 
+		\frac{1}{||p_i||^2_A} \frac{1}{||A^{-1}||^2} ||e_i||^4_A\\
+	\end{align*}
+
+	\begin{align*}
+		\frac{|1}{||p_i||^2_A} \frac{1}{||A^{-1}||^2} ||e_i||^4_A = \frac{1}{||Ae_i||^2_A} \frac{1}{||A^{-1}||^2} ||e_i||^4_A \geq \frac{1}{||A||_2^2 ||e_i||^2_A} \frac{1}{||A^{-1}||^2} ||e_i||^4_A  = \frac{1}{||A||_2^2||A^{-1}||^2} ||e_i||^2_A = \frac{1}{(\kappa(A))^2} ||e_i||^2_A
+	\end{align*}
+
+	(c)
+
+	Let's use induction in this part.
+
+	Basis: For $i = 0$, we would have
+
+	$$ ||e_0||_A^2 \leq (1 - \kappa(A)^{-2})^i||e_0||_A^2$$
+
+	The term in the paranthesis is equal to $1$, so the base of induction is clearly correct.
+
+	Induction step:
+
+	Assume that inequality holds for $i = k-1$, let's prove it also holds for $i = k$:
+
+	\begin{align}
+		(1 - \kappa(A)^{-2})^{k}||e_0||_A^2 = (1 - \kappa(A)^{-2})(1 - \kappa(A)^{-2})^{k-1}||e_0||_A^2 \geq (1 - \kappa(A)^{-2}) ||e_{k-1}||^2_A \\= ||e_{k-1}||^2_A - \frac{1}{(\kappa(A))^2}||e_{k-1}||^2_A \geq ||e_{k-1}||^2_A - \alpha_{k-1}p^T_{k-1}Ap_{k-1} = ||e_k||_A^2
+	\end{align}
+
+	So it also proved for $i = k$.
+	\item (P53)
+	
+	\textbf{Solution:} 
+	
+	(a) As the condition number increases, J deviates further from being flat, and the contours become more elliptical.
+
+
+\end{enumerate}
+\end{document}

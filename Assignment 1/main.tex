@@ -1,0 +1,207 @@
+\documentclass[12pt]{article}
+\usepackage[paper=letterpaper,margin=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{newtxtext, newtxmath}
+\usepackage{enumitem}
+\usepackage{titling}
+\usepackage[colorlinks=true]{hyperref}
+
+\setlength{\droptitle}{-6em}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{MS-E1651 - Numerical Matrix Computations
+\\Exercise 1}
+\author{Amirreza Akbari}
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{enumerate}[leftmargin=\labelsep]
+	\item (P9) 
+    
+    \textbf{Solution:} 
+	If \(n = 1\), then we can directly solve for \(x\):
+
+\[
+x = \frac{b}{L}
+\]
+	
+For $n > 1$, let \(L\) be an \(n \times n\) lower triangular matrix, and \(x\) and \(b\) be \(n \times 1\) column vectors. We can represent \(L\) and \(x\) as block matrices as follows:
+
+\[
+L = \begin{bmatrix}
+    l_{11} & 0 \\
+    L_{21} & L_{22}
+\end{bmatrix}
+\], \[
+x = \begin{bmatrix}
+    x_{1} \\
+    x_{2}
+\end{bmatrix}
+\], \[
+b = \begin{bmatrix}
+    b_{1} \\
+    b_{2}
+\end{bmatrix}
+\]
+
+Here, \(l_{11},\,x_1,\,b_1\) is a scalar, \(L_{21},\,x_{2},\,b_{2} \in \mathbb{R}^{(n-1)}\) column vector, \(L_{22} \in \mathbb{R}^{(n-1) \times (n-1)}\) matrix.
+
+We can express the linear system \(Lx = b\) in block form as follows:
+
+\[
+\begin{bmatrix}
+    l_{11} & 0 \\
+    L_{21} & L_{22}
+\end{bmatrix}
+\begin{bmatrix}
+    x_{1} \\
+    x_{2}
+\end{bmatrix}
+=
+\begin{bmatrix}
+    b_{1} \\
+    b_{2}
+\end{bmatrix}
+\]
+Since $L$ is invertible, $l_{11} \neq 0$, so we have:
+\begin{align*}
+det(L) = det(L_{22})det([l_{11}])
+\end{align*}
+Since $det([l_{11}])\neq 0 \neq det(L)$, then $det(L_{22}) \neq 0$, and $L_{22}$ is also invertible.
+
+So we can conclude that 
+
+$$x_1 = \frac{b_1}{l_{11}}$$
+
+Then we have the subproblem \(L_{22} x_{2} = (b_{2} - L_{21} x_{1})\). Since the coefficient matrix $L_{22}\in \mathbb{R}^{(n-1)\times(n-1)}$
+is invertible and lower triangular, $x_2$ can be obtained recursivley from $x_2 = trilsolve(L_{22},b_2 - L_{21}x_1)$.
+\item (P21) 
+
+\textbf{Solution:}
+We will prove that the inverse of any \(n \times n\) lower triangular matrix is lower triangular by induction on \(n\).
+\begin{itemize}
+\item Base Case:
+For \(n = 1\), consider a \(1 \times 1\) lower triangular matrix \(L\) given by \(L = [l]\), where \(l \neq 0\). Its inverse is \(L^{-1} = [l^{-1}]\), which is also a \(1 \times 1\) matrix, and thus it is lower triangular.
+
+\item Induction Hypothesis:
+Assume that the statement holds for positive integer \(n = k\).
+
+\item Induction Step:
+We want to prove that the statement also holds for \(n = k + 1\). Consider an \((k + 1) \times (k + 1)\) lower triangular matrix \(L_{k+1}\) as follows:
+
+\[
+L_{k+1} = \begin{bmatrix}
+    L_k & 0 \\
+    \mathbf{v} & l_{k+1}
+\end{bmatrix}
+\]
+
+Here, \(L_k\) is a \(k \times k\) lower triangular matrix, \(\mathbf{v}\) is a \(k \times 1\) column vector, and \(l_{k+1}\) is the \((k+1)\)-th diagonal element. Now to find the inverse of \(L_{k+1}\), denoted as \(L_{k+1}^{-1}\):
+
+\[
+L_{k+1}^{-1} = \begin{bmatrix}
+    L_k^{-1} & 0 \\
+    \mathbf{u} & \frac{1}{l_{k+1}}
+\end{bmatrix}
+\]
+
+where \(L_k^{-1}\) is the inverse of \(L_k\) (by the induction hypothesis), and \(\mathbf{u}\) is a column vector we need to determine.
+
+To find \(\mathbf{u}\), we consider the matrix equation \(L_{k+1} \cdot L_{k+1}^{-1} = I_{k+1}\), where \(I_{k+1}\) is the \((k+1) \times (k+1)\) identity matrix:
+
+\[
+\begin{bmatrix}
+    L_k & 0 \\
+    \mathbf{v} & l_{k+1}
+\end{bmatrix}
+\begin{bmatrix}
+    L_k^{-1} & 0 \\
+    \mathbf{u} & \frac{1}{l_{k+1}}
+\end{bmatrix}
+=
+\begin{bmatrix}
+    I_k & 0 \\
+    \mathbf{0} & 1
+\end{bmatrix}
+\]
+
+This equation yields two equations:
+
+1. \(L_k \cdot L_k^{-1} = I_k\), which is true since the inverse of a lower triangular matrix is lower triangular (inductive hypothesis).
+
+2. \(\mathbf{v} \cdot L_k^{-1} + l_{k+1} \cdot \mathbf{u} = \mathbf{0}\) and \(l_{k+1} \cdot \frac{1}{l_{k+1}} = 1\). Since \(L_k^{-1}\) is lower triangular, the equation \(\mathbf{v} \cdot L_k^{-1} + l_{k+1} \cdot \mathbf{u} = \mathbf{0}\) involves only lower triangular matrices and vectors, implying that \(\mathbf{u}\) must also be a lower triangular vector.
+
+
+Therefore, by induction, we have shown that the inverse of any \(n \times n\) lower triangular matrix is lower triangular.
+\end{itemize}
+\item (P5) (a) Show that
+\[
+\det
+\begin{bmatrix}
+I_{n\times n} & 0 \\
+0 & A_{22}^{m\times m}
+\end{bmatrix}
+= \det(A_{22}).
+\]
+
+Hint: recall the Laplace expansion for computing determinants and use induction with respect to parameter \(n\).
+
+(b) Modify the proof in (a) to show that
+\[
+\det
+\begin{bmatrix}
+I_{n\times n} & A_{12}^{n\times m} \\
+0 & A_{22}^{m\times m}
+\end{bmatrix}
+= \det(A_{22}).
+\]
+\textbf{Solution:} (a) To prove that $\det\left(\begin{matrix}I_{n\times n} & 0 \\ 0 & A_{22}^{m\times m}\end{matrix}\right) = \det(A_{22})$, we can use induction on the size of the matrix. We will start with the base case and then proceed with the induction step.
+\begin{itemize}
+	\item Base Case: For $n = 1$, you can indeed prove the base case by simply observing that opening the determinant expression from both sides will result in a multiplication of 1 (for the identity matrix) and all other terms being zero, ultimately leaving you with just $\det(A_{22})$
+
+	\item Induction Step: Assume that the statement holds for some positive integer $n = k$.
+
+Now, let's consider a matrix of size $(k+1)\times (k+1)$:
+
+$$
+M = \begin{bmatrix}
+I_{k\times k} & 0 & 0 \\
+0 & 1 & \mathbf{0}_{1\times m} \\
+0 & \mathbf{0}_{m\times 1} & A_{22}^{m\times m}
+\end{bmatrix}
+$$
+
+To compute its determinant, based on the induction hypothesis for $n = k$ and for $n = 1$, respectively, we have:
+
+$$
+\det(M) = \det(\begin{matrix}I_{1\times 1} & 0 \\ 0 & A_{22}^{m\times m}\end{matrix}) = \det(\begin{matrix}I_{1\times 1} & 0 \\ 0 & A_{22}^{m\times m}\end{matrix}) =\det(A_{22}) ,
+$$
+\end{itemize}
+
+(b) To prove that $\det\left(\begin{matrix}I_{n\times n} & A_{12}^{n\times m} \\ 0 & A_{22}^{m\times m}\end{matrix}\right) = \det(A_{22})$, we can modify the previous proof. We will use induction on the size of the matrix. 
+\begin{itemize}
+\item Base Case: For $n = 1$, if we consider the determinant expression of left side of equation, in the terms that we choose an element from $A^{1 \times {m}}_{12}$, there is at least a zero, because we have not choose any element from column $1$ yet. So these terms are equal to zero. The terms of left expression is the same as terms of right expression by just multiplying in a one.
+
+\item Induction Step: Assume that the statement holds for some positive integer $n = k$.
+
+Now, let's consider a matrix of size $(k+1)\times (k+1)$:
+
+$$
+M = \begin{bmatrix}
+I_{k\times k} & c & X_{12}^{k\times m}\\
+0 & 1 & \mathbf{d}_{1\times m} \\
+0 & \mathbf{0}_{m\times 1} & A_{22}^{m\times m}
+\end{bmatrix}
+$$
+
+To compute its determinant, based on the induction hypothesis for $n = k$ and for $n = 1$, respectively, we have:
+
+$$
+\det(M) = \det\left(\begin{matrix}1 & d^{1\times m} \\ 0 & A_{22}^{m\times m}\end{matrix}\right) = \det(A_{22}^{m\times m})
+$$
+\end{itemize}
+\end{enumerate}
+\end{document}

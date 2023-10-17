@@ -1,0 +1,288 @@
+\documentclass[12pt]{article}
+\usepackage[paper=letterpaper,margin=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{newtxtext, newtxmath}
+\usepackage{enumitem}
+\usepackage{titling}
+\usepackage[colorlinks=true]{hyperref}
+
+\setlength{\droptitle}{-6em}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{MS-E1651 - Numerical Matrix Computations
+\\Exercise 2}
+\author{Amirreza Akbari}
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{enumerate}[leftmargin=\labelsep]
+	\item (P29) 
+
+\textbf{Solution:} 
+	
+(a) We are given \(A = LL^T\). We want to prove that \(A\) is symmetric, i.e., \(A = A^T\).
+
+Let's compute the transpose of \(A^T\):
+
+\[
+(A^T)^T = A
+\]
+
+Now, let's compute the transpose of \(LL^T\):
+
+\[
+(LL^T)^T = (L^T)^T L^T = LL^T
+\]
+
+Since \((LL^T)^T\) is equal to \(LL^T\) and \((A^T)^T\) is equal to \(A\), we can conclude that \(A\) is symmetric. Using the definition of (1.27), show that if a matrix \(A\) has a decomposition \(A = LL^T\), it must be positive definite.
+
+To show this, let's use the definition of positive definiteness:
+
+A matrix \(A\) is positive definite if for any nonzero vector \(x\), the expression \(x^TAx\) is greater than zero. Given \(A = LL^T\), we want to show that \(x^TAx > 0\) for all nonzero \(x\). Let \(x\) be a nonzero vector, then:
+
+\[
+x^TAx = x^TLL^Tx = (L^Tx)^T(L^Tx) = \|L^Tx\|^2 \geq 0
+\]
+
+Since the squared norm of any vector is non-negative (\(\|v\|^2 \geq 0\) for any vector \(v\)), we have shown that \(x^TAx \geq 0\) for all nonzero \(x\).
+
+Therefore, matrix \(A\) is positive definite.
+
+(b) To find the Cholesky decomposition of a matrix \(A\) using the recursive definition:
+
+For \(n = 1\), \(rchol(A) = \sqrt{A}\).
+
+For \(n > 1\), we split \(A\) as follows:
+\[
+A = \begin{bmatrix}
+a_{11} & \mathbf{a}_{21}^T \\
+\mathbf{a}_{21} & A_{22}
+\end{bmatrix}
+\]
+
+Let \(L_2 = rchol\left(A_{22} - \frac{\mathbf{a}_{21}\mathbf{a}_{21}^T}{a_{11}}\right)\).
+
+By equation (1.31), we have:
+\[
+rchol(A) = \begin{bmatrix}
+\sqrt{a_{11}} & \mathbf{0} \\
+\frac{1}{\sqrt{a_{11}}} \mathbf{a}_{21} & L_2
+\end{bmatrix}
+\] 
+
+Compute the Cholesky decomposition of the matrix:
+\[
+A = \begin{bmatrix}
+1 & 2 & 2 \\
+2 & 8 & 4 \\
+2 & 4 & 15
+\end{bmatrix}
+\]
+
+We start by splitting \(A\) into the specified form:
+\[
+A = \begin{bmatrix}
+1 & \begin{bmatrix} 2 \\ 2 \end{bmatrix}^T \\
+\begin{bmatrix} 2 \\ 2 \end{bmatrix} & \begin{bmatrix} 8 & 4 \\ 4 & 15 \end{bmatrix}
+\end{bmatrix}
+\]
+
+Next, we compute \(L_2\) for the bottom-right submatrix using the recursive definition:
+\[
+L_2 = rchol\left(\begin{bmatrix} 8 & 4 \\ 4 & 15 \end{bmatrix} - \frac{\begin{bmatrix} 2 \\ 2 \end{bmatrix} \begin{bmatrix} 2 & 2 \end{bmatrix}}{1}\right)
+\]
+
+Now, compute the subtraction and \(L_2\):
+
+\[
+L_2 = rchol\left(\begin{bmatrix} 8 & 4 \\ 4 & 15 \end{bmatrix} - \begin{bmatrix} 4 & 4 \\ 4 & 4 \end{bmatrix}\right)
+\]
+
+so we have 
+
+\[
+L_2 = rchol\left(\begin{bmatrix} 4 & 0 \\ 0 & 11 \end{bmatrix}\right)
+\]
+
+Now, recursively compute the Cholesky decomposition of this \(2 \times 2\) matrix. We start by splitting $\left(\begin{bmatrix} 4 & 0 \\ 0 & 11 \end{bmatrix}\right)$ into the specified form:
+\[
+\begin{bmatrix}
+4 & \begin{bmatrix} 0 \end{bmatrix}^T \\ 
+\begin{bmatrix} 0 \end{bmatrix} & \begin{bmatrix} 11 \end{bmatrix}
+\end{bmatrix}
+\]
+
+so we have:
+
+\[
+L_2 = \begin{bmatrix}
+2 &  0  \\ 
+ 0  & \sqrt{11} 
+\end{bmatrix}
+\]
+
+So, the final result for \(rchol(A)\) can be constructed using the recursive formula:
+
+\[
+rchol(A) = \begin{bmatrix} 1 & 0 & 0 \\ 2 & 2 & 0 \\ 2 & 0 & \sqrt{11} \end{bmatrix}
+\]
+
+(c) 
+Let $F$ be the matrix:
+\[
+F = \begin{bmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0
+\end{bmatrix}
+\]
+
+And let $A$ be the matrix:
+\[
+A = \begin{bmatrix}
+1 & 2 & 2 \\
+2 & 8 & 4 \\
+2 & 4 & 15
+\end{bmatrix}
+\]
+
+We want to compute $F^TAF$:
+
+1. Calculate $F^T$, which is the transpose of matrix $F$:
+\[
+F^T = \begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix}
+\]
+
+2. Now, compute $F^TAF$ by performing the matrix multiplications:
+\[
+F^TAF = \begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+1 & 2 & 2 \\
+2 & 8 & 4 \\
+2 & 4 & 15
+\end{bmatrix}
+\begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix}
+\]
+
+3. Calculate the product $F^TAF$ by performing the multiplications:
+\[
+F^TAF = \begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+1 & 2 & 2 \\
+2 & 8 & 4 \\
+2 & 4 & 15
+\end{bmatrix}
+\begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix}
+=
+\begin{bmatrix}
+15 & 2 & 4 \\
+2 & 1 & 2 \\
+4 & 2 & 8
+\end{bmatrix}
+\]
+
+So, with the updated matrix $F$, the result of $F^TAF$ is the same as the given matrix $A$:
+\[
+F^TAF =
+\begin{bmatrix}
+15 & 2 & 4 \\
+2 & 1 & 2 \\
+4 & 2 & 8
+\end{bmatrix}
+\]
+
+The matrix 
+$F$ has a trivial null space because it is a permutation matrix. On the other hand, we found Cholesky decomposition for matrix $A$ and based on the part (a), matrix $A$ is positive definite. According to Lemma 1.3, $F^TAF$ is also positive definite.
+
+\newpage
+\item (P30) 
+
+\textbf{Solution:} 
+
+(a) The graph $G(A)$ can be visualized as follows:
+
+\begin{center}
+\begin{tikzpicture}
+  % Vertices
+  \node[circle, draw] (1) at (0, 0) {1};
+  \node[circle, draw] (2) at (2, 0) {2};
+  \node[circle, draw] (3) at (4, 0) {3};
+  \node[circle, draw] (4) at (6, 0) {4};
+  \node[circle, draw] (5) at (2, -1.5) {5};
+  % Edges
+  \draw (1) -- (2);
+  \draw (2) -- (3);
+  \draw (2) -- (5);
+  \draw (3) -- (4);
+\end{tikzpicture}
+\end{center}
+
+So, this is the graph $G(A)$ corresponding to the matrix $A$. It consists of five vertices and the edges connecting them as described above.
+
+(b) For each vertex $i \in V(A)$, we will compute the set $\text{reach}(i, \{1, \ldots, i - 1\})$, which represents the set of vertices that can be reached from vertex $i$ by following set along the edges of the graph $G(A)$. Let's compute these sets:
+
+1. For vertex 1:
+   $\text{reach}(1, \emptyset) = \{2\}$ 
+
+2. For vertex 2:
+   $\text{reach}(2, \{1\}) = \{3, 5\}$ 
+
+3. For vertex 3:
+   $\text{reach}(3, \{1, 2\}) = \{4, 5\}$ 
+
+4. For vertex 4:
+   $\text{reach}(4, \{1, 2, 3\}) = \{5\}$ 
+
+5. For vertex 5:
+   $\text{reach}(5, \{1, 2, 3, 4\}) = \emptyset$ 
+
+(c) 
+
+\begin{itemize}
+\item off-diagonal non-zeros on column 1 are $\text{reach}(1, \emptyset) = \{2\}$.
+\item off-diagonal non-zeros on column 2 are $\text{reach}(2, \{1\}) = \{3, 5\}$.
+\item off-diagonal non-zeros on column 3 are $\text{reach}(3, \{1, 2\}) = \{4, 5\}$.
+\item off-diagonal non-zeros on column 4 are $\text{reach}(4, \{1, 2, 3\}) = \{5\}$
+\item off-diagonal non-zeros on column 5 are $\text{reach}(5, \{1, 2, 3, 4\}) = \emptyset$.
+
+\end{itemize}
+
+The non-zeros of the computed factor are
+
+\[
+\begin{bmatrix}
+x & 0 & 0 & 0 & 0 \\
+x & x & 0 & 0 & 0 \\
+0 & x & x & 0 & 0 \\
+0 & 0 & x & x & 0 \\
+0 & x & x & x & x \\
+\end{bmatrix}
+\]
+
+(d) The code is in p35d.m
+\end{enumerate}
+\end{document}

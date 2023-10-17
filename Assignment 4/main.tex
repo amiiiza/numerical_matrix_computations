@@ -1,0 +1,380 @@
+\documentclass{article}
+\usepackage[paper=letterpaper,margin=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{newtxtext, newtxmath}
+\usepackage{enumitem}
+\usepackage{titling}
+\usepackage[colorlinks=true]{hyperref}
+
+\setlength{\droptitle}{-6em}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{MS-E1651 - Numerical Matrix Computations
+\\Exercise 4}
+\author{Amirreza Akbari}
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{enumerate}[leftmargin=\labelsep]
+	\item (P48)
+	
+	\textbf{Solution:}
+
+	\begin{align}
+		||A||_2 = \sigma_{max}(A)\\
+		||A||_F = \sqrt{\Sigma_{i,j} |a_{ij}|^2} = \sqrt{trace(A^{*}A)} = \sqrt{\Sigma_{i} \sigma_{i}^2}
+	\end{align}
+	Since $\sigma_{max}(A)$ is among the eigenvalues, we can conclude 
+
+	$$||A||_2 \leq ||A||_F$$
+
+	and if since all of eigenvalues are less than $\sigma_{max}(A)$, we can conclue 
+
+	$$||A||_F \leq \sqrt{n}||A||_2$$
+	\item (P49)
+	
+	\textbf{Solution:}
+
+	(a) Let's write down the equation of each norm:
+
+	\begin{align}
+		||\delta A||_F = \sqrt{\Sigma_{i,j} |\delta a_{ij}|^2} \leq \sqrt{\Sigma_{i,j} \epsilon_{ij}^2|a_{ij}|^2} \leq \sqrt{\Sigma_{i,j} \epsilon^2|a_{ij}|^2} = \epsilon\sqrt{\Sigma_{i,j}|a_{ij}|^2} = \epsilon ||A||_F
+	\end{align}
+
+	(b) Let's write down the equation of each norm:
+
+	\begin{align}
+		||\delta A||_1 = \max_j{\Sigma_{i} |\delta a_{ij}|} \leq \max_j{\Sigma_{i} |\epsilon_{ij}||a_{ij}|} \leq \max_j{\Sigma_{i} \epsilon|a_{ij}|}  = \epsilon ||A||_1
+	\end{align}
+
+	(c) Let's write down the equation of each norm:
+
+	\begin{align}
+		||\delta A||_{\infty} = \max_i{\Sigma_{j} |\delta a_{ij}|} \leq \max_i{\Sigma_{j} |\epsilon_{ij}||a_{ij}|} \leq \max_i{\Sigma_{j} \epsilon|a_{ij}|}  = \epsilon ||A||_{\infty}
+	\end{align}
+	\item (P53)\\[0.5em]
+\textbf{Solution:} 
+	
+(a) We want to compute the 2-norm of the vector $\mathbf{a21}$ and add 1 to it.
+
+The vector $\mathbf{a21}$ is defined as:
+\[
+\mathbf{a21} = \left[ \sqrt{\pi + 1}, \sqrt{\pi + 2}, \ldots, \sqrt{\pi + (n - 1)} \right]^T
+\]
+
+To calculate the 2-norm (Euclidean norm) of a vector, we square each element, sum the squares, and then take the square root of the sum:
+
+\[
+\begin{aligned}
+||\mathbf{a21}||_2 &= \sqrt{\left( \sqrt{\pi + 1} \right)^2 + \left( \sqrt{\pi + 2} \right)^2 + \ldots + \left( \sqrt{\pi + (n - 1)} \right)^2} \\
+&= \sqrt{(\pi + 1) + (\pi + 2) + \ldots + (\pi + (n - 1))}
+\end{aligned}
+\]
+
+Simplifying the sum inside the square root, we get:
+\[
+||\mathbf{a21}||_2 = \sqrt{(n-1)\pi + 1 + 2 + \ldots + (n - 1)}
+\]
+
+So, the sum simplifies to:
+\[
+||\mathbf{a21}||_2 = \sqrt{(n-1)\pi + \frac{n(n - 1)}{2}}
+\]
+
+Finally, we can compute $a11$ by adding 1 to this value:
+\[
+a_{11} = ||\mathbf{a21}||_2 + 1 = \sqrt{(n-1)\pi + \frac{n(n - 1)}{2}} + 1
+\]
+\item (P54)
+
+\textbf{Solution:}
+
+(a) According to P53, we have
+\begin{align}
+	(a_{11}-a_{21}^Ta_{21})x_1 &= 1\\
+	(a_{11}-(a_{11} - 1))x_1 &= 1\\
+	x_1 &= 1
+\end{align}
+and also for $x_2$, we have
+\begin{align}
+	x_2 &= -a_{21}x_1\\
+	x_2 &= -a_{21}\\
+	x_2 &= \left[ -\sqrt{\pi + 1}, -\sqrt{\pi + 2}, \ldots, -\sqrt{\pi + (n - 1)} \right]^T
+\end{align}
+\item (P55)
+\textbf{Solution: }
+
+(a) Let $U \in \mathbb{R}^{2 \times 2}$ be such that $U^TU = I$. Consider the mapping $f : \mathbb{R}^n \rightarrow \mathbb{R}^n$ such that
+\[
+[y_i, y_j]^T = U[x_i, x_j]^T
+\]
+and $y_k = x_k$ for $k \neq i, k \neq j$. That is, the matrix $U$ operates on rows $i$ and $j$ of vector $x$, while all other rows are left untouched.
+
+To prove that $f$ is a linear mapping, we need to show that it satisfies the properties of additivity and homogeneity.
+
+\begin{itemize}
+\item \textbf{Additivity}:
+
+We need to show that for any two vectors $x$ and $z$, the mapping $f$ applied to their sum equals the sum of the mappings of each vector:
+\[
+f(x + z) = f(x) + f(z)
+\]
+
+Let's calculate $f(x + z)$ and $f(x) + f(z)$ and check if they are equal.
+
+For $f(x + z)$:
+\begin{align}
+[y_i, y_j]^T &= U[x_i + z_{i}, x_j + z_{j}]^T \\
+&= U[x_i, x_j]^T + U[z_{i}, z_{j}]^T
+\end{align}
+
+Moreover note that for all $t \neq i,\,j$, we have $f(x+z)_t = (x + z)_t = x_t + z_t$.
+
+Now, for $f(x) + f(z)$:
+\begin{align}
+[y_i, y_j]^T &= U[x_i, x_j]^T + U[z_{i}, z_{j}]^T
+\end{align}
+
+Moreover note that for all $t \neq i,\,j$, we have $f(x)_t+f(z)_t = x_t + z_t$, and since $U[x_i, x_j]^T + U[z_{i}, z_{j}]^T = U[x_i + z_{i}, x_j + z_{j}]^T$, we have shown that $f$ satisfies additivity.
+
+\item \textbf{Homogeneity}:
+
+We need to show that for any scalar $\alpha$ and vector $x$, the mapping $f$ applied to the scaled vector $\alpha x$ equals the scaled mapping of the vector:
+\[
+f(\alpha x) = \alpha f(x)
+\]
+
+Let's calculate $f(\alpha x)$ and $\alpha f(x)$ and check if they are equal.
+
+For $f(\alpha x)$:
+\begin{align*}
+[y_i, y_j]^T &= U[\alpha x_i, \alpha x_j]^T \\
+&= \alpha U[x_i, x_j]^T
+\end{align*}
+
+Moreover note that for all $t \neq i,\,j$, we have $f(\alpha x)_t = (\alpha x)_t =\alpha x_t$.
+
+Now, for $\alpha f(x)$:
+\begin{align*}
+[y_i, y_j]^T &= \alpha U[x_i, x_j]^T
+\end{align*}
+
+Moreover note that for all $t \neq i,\,j$, we have $\alpha f(x)_t =\alpha x_t$, and since $\alpha U[x_i, x_j]^T = \alpha U[x_i, x_j]^T$, we have shown that $f$ satisfies homogeneity.
+
+Therefore, we have demonstrated that the mapping $f$ is linear because it satisfies both additivity and homogeneity properties.
+\end{itemize}
+(b) The right side of the equation is given by:
+
+\[
+x^T y = \sum_{t} x_t y_t
+\]
+
+For the left side of the equation, we note that the elements of \(f(x)\) and \(f(y)\) are the same as \(x\) and \(y\) except in coordinates \(i\) and \(j\). Therefore, we have:
+
+\begin{align*}
+f(x)^T f(y) &= \left(U[x_i, x_j]^T\right)^T \left(U[y_i, y_j]^T\right) + \sum_{t \neq i, j} x_t y_t \\
+&= \left([x_i, x_j]U^T U [y_i, y_j]^T\right) + \sum_{t \neq i, j} x_t y_t \\
+&= \left([x_i, x_j]I [y_i, y_j]^T\right) + \sum_{t \neq i, j} x_t y_t \\
+&= x_i y_i + x_j y_j + \sum_{t \neq i, j} x_t y_t \\
+&= \sum_{t} x_t y_t
+\end{align*}
+
+Hence, we have demonstrated that both sides of the equation are equal.
+
+(c) Let's consider the mapping \(f(x) = Gx\). Since it satisfies equation (1.95), we have:
+
+\begin{align*}
+f(x)^T f(y) &= x^T y \\
+(Gx)^T G y &= x^T G^T G y = x^T y
+\end{align*}
+
+Now, let's consider \(A = G^T G\), and we want to obtain \(A_{ij}\) for all \(1 \leq i, j \leq n\). Since the above equation holds for all \(x\) and \(y\), we can define \(x\) and \(y\) in such a way that the left side of the equation becomes equal to \(A_{ij}\). 
+
+Define \(x\) as follows:
+\[
+x_t =
+\begin{cases}
+1, & \text{if } t = i \\
+0, & \text{otherwise}
+\end{cases}
+\]
+
+Define \(y\) as follows:
+\[
+y_t =
+\begin{cases}
+1, & \text{if } t = j \\
+0, & \text{otherwise}
+\end{cases}
+\]
+
+Now, \(x^T A\) will only keep row \(i\) of \(A\), and similarly, \(x^T A y\) will only keep row \(i\) and column \(j\).
+
+Note that if \(i \neq j\), the left side of the equation is equal to zero, and if \(i = j\), the left side of the equation is equal to one.
+
+Thus, we find that \(A_{ii} = 1\) and \(A_{ij} = 0\) for \(i \neq j\). Therefore, we conclude that \(A = G^T G = I\).
+
+Hence, \(G\) is unitary.
+\item (P56)
+
+\textbf{Solution: }
+
+(a) We know that 
+$$UA = \begin{bmatrix}
+	r_1 & r_2 \\
+	0 & r_3
+\end{bmatrix} \rightarrow A = U^T \begin{bmatrix}
+	r_1 & r_2 \\
+	0 & r_3
+\end{bmatrix}$$
+Now we need to find QR-decomposition of $A$.
+
+Consider the matrix $A = \begin{bmatrix}
+1 & 2 \\
+3 & 4 \\
+\end{bmatrix}$.
+
+\textbf{Step 1:} Initialize $Q$ and $R$:
+Set $Q$ as an empty matrix and $R$ as a matrix of zeros.
+
+\textbf{Step 2:} Orthogonalize the first column of the matrix:
+For the first column of $A$, $\begin{bmatrix}
+1 \\
+3 \\
+\end{bmatrix}$, normalize it to obtain the first column of $Q$:
+\begin{align*}
+v_1 &= \begin{bmatrix}
+1 \\
+3 \\
+\end{bmatrix} \\
+q_1 &= \frac{v_1}{\|v_1\|} = \frac{1}{\sqrt{1^2 + 3^2}} \begin{bmatrix}
+1 \\
+3 \\
+\end{bmatrix} = \frac{1}{\sqrt{10}} \begin{bmatrix}
+1 \\
+3 \\
+\end{bmatrix}
+\end{align*}
+
+Now, set the first column of $Q$ to be $q_1$ and update $R$:
+\[
+Q = \begin{bmatrix}
+q_1 \\
+\end{bmatrix}, \quad R = \begin{bmatrix}
+\langle v_1, q_1 \rangle \\
+\end{bmatrix}
+\]
+
+\textbf{Step 3:} Orthogonalize the second column of the matrix:
+For the second column of $A$, $\begin{bmatrix}
+2 \\
+4 \\
+\end{bmatrix}$, subtract its projection onto $q_1$ from itself:
+
+\begin{align*}
+v_2 &= \begin{bmatrix}
+2 \\
+4 \\
+\end{bmatrix} - \langle \begin{bmatrix}
+2 \\
+4 \\
+\end{bmatrix}, q_1 \rangle q_1 \\
+&= \begin{bmatrix}
+2 \\
+4 \\
+\end{bmatrix} - \frac{14}{\sqrt{10}} \frac{1}{\sqrt{10}} \begin{bmatrix}
+1 \\
+3 \\
+\end{bmatrix} \\
+&= \begin{bmatrix}
+2 \\
+4 \\
+\end{bmatrix} - \frac{14}{10} \begin{bmatrix}
+1 \\
+3 \\
+\end{bmatrix} \\
+&= \begin{bmatrix}
+2 \\
+4 \\
+\end{bmatrix} - \begin{bmatrix}
+\frac{14}{10} \\
+\frac{42}{10} \\
+\end{bmatrix} \\
+&= \begin{bmatrix}
+2 - \frac{14}{10} \\
+4 - \frac{42}{10} \\
+\end{bmatrix} = \begin{bmatrix}
+	\frac{-6}{10} \\
+	\frac{-2}{10} \\
+	\end{bmatrix}
+\end{align*}
+
+Now, normalize $v_2$ to obtain $q_2$:
+\[
+q_2 = \frac{v_2}{\|v_2\|} = \frac{1}{\sqrt{\left(\frac{-6}{10}\right)^2 + \left(\frac{-2}{10}\right)^2}} \begin{bmatrix}
+	\frac{-6}{10} \\
+	\frac{-2}{10} \\
+\end{bmatrix} = \frac{1}{\sqrt{\frac{2}{5}}}\begin{bmatrix}
+	\frac{-6}{10} \\
+	\frac{-2}{10} \\
+	\end{bmatrix}
+\]
+
+Now, update $Q$:
+\[
+Q = \begin{bmatrix}
+q_1 & q_2 \\
+\end{bmatrix}
+\]
+Moreover we define $U$, transpose of obtained $Q$.
+
+(b) Since the second row remains unchanged after the multiplication, and only the first and third rows are affected, we can consider $U$ as a similar linear map to the previous problem. Assuming that the matrix $U$ can be represented as:
+
+\[
+U = \begin{bmatrix}
+a & 0 & b \\
+0 & 1 & 0 \\
+c & 0 & d \\
+\end{bmatrix}
+\]
+
+To determine the values of $a$, $b$, $c$, and $d$, we can perform the following calculations:
+
+\begin{align*}
+c + 3d &= 0 \quad \text{(from the original problem)} \\
+d &= \frac{-c}{3}
+\end{align*}
+
+On the other hand, since $U$ is unitary, we have:
+
+\[
+U^TU = UU^T = I
+\]
+
+This implies:
+
+\begin{align*}
+a^2 + b^2 &= 1 \\
+c^2 + d^2 &= 1 \\
+a^2 + c^2 &= 1 \\
+b^2 + d^2 &= 1
+\end{align*}
+
+So we have either $c = \frac{3}{\sqrt{10}}$ or $c = \frac{-3}{\sqrt{10}}$. Assuming the first case, we find $d = \frac{-1}{\sqrt{10}}$. Then, by computation, we conclude that $a$ is either $\frac{1}{\sqrt{10}}$ or $\frac{-1}{\sqrt{10}}$, and $b$ is either $\frac{3}{\sqrt{10}}$ or $\frac{-3}{\sqrt{10}}$.
+
+A possible matrix representation for $U$ is:
+
+\[
+U = \begin{bmatrix}
+\frac{1}{\sqrt{10}} & 0 & \frac{3}{\sqrt{10}} \\
+0 & 1 & 0 \\
+\frac{3}{\sqrt{10}} & 0 & \frac{-1}{\sqrt{10}} \\
+\end{bmatrix}
+\]
+
+\end{enumerate}
+\end{document}
